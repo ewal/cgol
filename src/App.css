@@ -2,9 +2,10 @@ body {
   display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: grey;
+  background-color: #0d0208;
   justify-content: center;
   align-items: center;
+  color: #00ff41;
 }
 
 .gameTable {
@@ -13,25 +14,42 @@ body {
   grid-auto-flow: row;
   width: 98vh;
   height: 98vh;
-  grid-row-gap: 1px;
-  box-shadow: 0 0 10px 4px #222;
+  grid-row-gap: 2px;
+  box-shadow: 0 0 10px 4px #111;
+  background-color: #008f11;
+  border: solid 2px #008f11;
+  transform: perspective(100px) rotateX(5deg) translateY(-150px);
 }
 
 .row {
   display: grid;
   grid-auto-flow: row;
   grid-template-columns: repeat(50, 1fr);
-  grid-column-gap: 1px;
+  grid-column-gap: 2px;
 }
 
 .cell {
-  background-color: black;
-  opacity: 0.2;
-  transition: opacity 0.7s;
+  background-color: #003b00;
+  box-shadow: 1px 1px 1px 1px #0d0208 inset;
+  transition: background-color 0.5s;
+}
+
+.cell:hover {
+  background-color: #00ff41;
+  transition: background-color 0.1s;
 }
 
 .alive {
-  opacity: 1;
-  background-color: #111;
-  box-shadow: 0 0 0px 1px black;
+  background-color: #00ff41;
+  /* box-shadow: 1px  2px 2px #0d0208 inset; */
+}
+
+.stats {
+  display: flex;
+  padding-top: 15px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  justify-content: center;
 }

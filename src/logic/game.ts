@@ -28,7 +28,7 @@ class Grid {
       .sort((a, b) => a.r - b.r)
       .map((a) => a.x)
       .slice(0, this.initialAlive)
-      .forEach((cell) => cell.awaken());
+      .forEach((cell) => (cell.alive = true));
   }
 
   updateCells(): void {
@@ -48,6 +48,10 @@ class Grid {
 
   livingNeighbours(cell: Cell): Cell[] {
     return this.findNeighbourCells(cell).filter((n) => n.alive === true);
+  }
+
+  get activeCells(): Cell[] {
+    return this.cells.flat().filter((c) => c.alive);
   }
 
   runNewGeneration(): void {
@@ -112,14 +116,6 @@ class Cell {
 
   toggle(): void {
     this.alive = !this.alive;
-  }
-
-  awaken(): void {
-    this.alive = true;
-  }
-
-  kill(): void {
-    this.alive = false;
   }
 }
 

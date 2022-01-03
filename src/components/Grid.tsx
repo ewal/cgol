@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Grid as GameGrid, Cell as GameCell } from "../logic/game";
 import Cell from "./Cell";
 import Row from "./Row";
+import Stats from "./Stats";
 
 interface IProps {
   gameGrid: GameGrid;
@@ -19,8 +20,7 @@ const Grid: React.FC<IProps> = ({ gameGrid }) => {
       gameGrid.runNewGeneration();
       gameGrid.updateCells();
       setState(gameGrid.cells);
-      console.log("Tick");
-    }, 1000);
+    }, 250);
     return () => clearInterval(interval);
   }, []);
 
@@ -30,7 +30,7 @@ const Grid: React.FC<IProps> = ({ gameGrid }) => {
         {gameRow.map((gameCell) => (
           <Cell
             key={`cell-${gameCell.row}-${gameCell.order}`}
-            alive={gameCell.alive}
+            cell={gameCell}
           />
         ))}
       </Row>
@@ -39,6 +39,7 @@ const Grid: React.FC<IProps> = ({ gameGrid }) => {
 
   return (
     <>
+      <Stats gameGrid={gameGrid} />
       <div className="gameTable">{rows}</div>
     </>
   );
