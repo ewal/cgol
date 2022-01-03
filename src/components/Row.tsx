@@ -1,5 +1,5 @@
 const Row: React.FC = ({ children }) => {
-  return <tr>{children}</tr>;
+  return <div className="row">{children}</div>;
 };
 
 export default Row;

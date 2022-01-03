@@ -14,14 +14,22 @@ const Grid: React.FC<IProps> = ({ gameGrid }) => {
     setState(gameGrid.cells);
   }, [gameGrid.cells]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      gameGrid.runNewGeneration();
+      gameGrid.updateCells();
+      setState(gameGrid.cells);
+      console.log("Tick");
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const rows = state?.map((gameRow, i) => {
     return (
       <Row key={`row-${i}`}>
         {gameRow.map((gameCell) => (
           <Cell
             key={`cell-${gameCell.row}-${gameCell.order}`}
-            row={gameCell.row}
-            order={gameCell.order}
             alive={gameCell.alive}
           />
         ))}
@@ -29,20 +37,9 @@ const Grid: React.FC<IProps> = ({ gameGrid }) => {
     );
   });
 
-  const handleClick = () => {
-    gameGrid.cells[0][0].toggle();
-    gameGrid.update();
-    setState(gameGrid.cells);
-  };
-
   return (
     <>
-      <button type="button" onClick={handleClick}>
-        Set
-      </button>
-      <table className="gameTable">
-        <tbody>{rows}</tbody>
-      </table>
+      <div className="gameTable">{rows}</div>
     </>
   );
 };

@@ -14,13 +14,11 @@ class Grid {
   initialAlive: number;
   cells: Cell[][];
 
-  constructor(size = 10, initialAlive = 10, randomize = true) {
+  constructor(size = 10, initialAlive = 10) {
     this.size = size;
     this.initialAlive = initialAlive;
     this.cells = this.generateMatrix();
-    if (randomize) {
-      this.randomizeAliveCells();
-    }
+    this.randomizeAliveCells();
   }
 
   randomizeAliveCells(): void {
@@ -52,24 +50,39 @@ class Grid {
     return this.findNeighbourCells(cell).filter((n) => n.alive === true);
   }
 
-  judgementDay(cell: Cell): void {
+  runNewGeneration(): void {
+    const matrix = this.cells.map((row) => {
+      return row.map((cell) => {
+        const shouldLive = this.judgementDay(cell);
+        return new Cell(cell.row, cell.order, shouldLive);
+      });
+    });
+
+    this.cells = matrix;
+  }
+
+  judgementDay(cell: Cell): boolean | undefined {
     const neighbours = this.livingNeighbours(cell);
 
     if (cell.alive) {
       if (neighbours.length < 2) {
-        cell.alive = false;
+        return false;
       }
-      if (neighbours.length === 2 || neighbours.length === 3) {
-        cell.alive = true;
+      if (neighbours.length === 2) {
+        return true;
+      }
+      if (neighbours.length === 3) {
+        return true;
       }
       if (neighbours.length > 3) {
-        cell.alive = false;
+        return false;
       }
     } else {
-      if (neighbours.length === 0) {
-        cell.alive = true;
+      if (neighbours.length === 3) {
+        return true;
       }
     }
+    return undefined;
   }
 
   generateMatrix(): Cell[][] {
@@ -91,10 +104,10 @@ class Cell {
   order: number;
   alive: boolean;
 
-  constructor(row: number, order: number) {
+  constructor(row: number, order: number, alive = false) {
     this.row = row;
     this.order = order;
-    this.alive = false;
+    this.alive = alive;
   }
 
   toggle(): void {

@@ -1,15 +1,9 @@
 interface IProps {
-  row: number;
-  order: number;
   alive: boolean;
 }
 
-const Cell: React.FC<IProps> = ({ row, order, alive }) => {
-  return (
-    <td className={["cell", alive && "alive"].join(" ")}>
-      r:{row} o:{order}
-    </td>
-  );
+const Cell: React.FC<IProps> = ({ alive }) => {
+  return <div className={["cell", alive && "alive"].join(" ")}></div>;
 };
 
 export default Cell;

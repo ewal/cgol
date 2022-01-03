@@ -43,30 +43,31 @@ describe("Game logic", () => {
   describe("judgementDay", () => {
     describe("when having fewer than two neighbours", () => {
       it("dies", () => {
-        const grid = new Grid(10, 10, false);
+        const grid = new Grid(20, 20);
         const cell = grid.cells[0][0];
         cell.alive = true;
-        grid.judgementDay(cell);
-        expect(cell.alive).toBeFalsy();
+        const shouldLive = grid.judgementDay(cell);
+        expect(shouldLive).toBeFalsy();
       });
     });
 
     describe("when having 2 neighbours", () => {
       it("survives", () => {
-        const grid = new Grid(10, 10, false);
+        const grid = new Grid(20, 20);
         const cell = grid.cells[0][0];
         const neighbours = grid.findNeighbourCells(cell);
         neighbours[0].alive = true;
         neighbours[1].alive = true;
         cell.alive = true;
         grid.judgementDay(cell);
-        expect(cell.alive).toBeTruthy();
+        const shouldLive = grid.judgementDay(cell);
+        expect(shouldLive).toBeTruthy();
       });
     });
 
     describe("when having 3 neighbours", () => {
       it("survives", () => {
-        const grid = new Grid(10, 10, false);
+        const grid = new Grid(20, 20);
         const cell = grid.cells[0][0];
         const neighbours = grid.findNeighbourCells(cell);
         neighbours[0].alive = true;
@@ -74,13 +75,14 @@ describe("Game logic", () => {
         neighbours[2].alive = true;
         cell.alive = true;
         grid.judgementDay(cell);
-        expect(cell.alive).toBeTruthy();
+        const shouldLive = grid.judgementDay(cell);
+        expect(shouldLive).toBeTruthy();
       });
     });
 
     describe("when there are more than 3 neighbours", () => {
       it("dies", () => {
-        const grid = new Grid(10, 10, false);
+        const grid = new Grid(20, 20);
         const cell = grid.cells[2][2];
         const neighbours = grid.findNeighbourCells(cell);
         neighbours[0].alive = true;
@@ -88,18 +90,22 @@ describe("Game logic", () => {
         neighbours[2].alive = true;
         neighbours[3].alive = true;
         cell.alive = true;
-        grid.judgementDay(cell);
-        expect(cell.alive).toBeFalsy();
+        const shouldLive = grid.judgementDay(cell);
+        expect(shouldLive).toBeFalsy();
       });
     });
 
-    describe("when dead and have no neighbours", () => {
+    describe("when dead but have three alive neighbours", () => {
       it("resurrects", () => {
-        const grid = new Grid(10, 10, false);
+        const grid = new Grid(10, 10);
         const cell = grid.cells[2][2];
+        grid.cells.flat().forEach((c) => (c.alive = false));
+        grid.cells[1][1].alive = true;
+        grid.cells[1][2].alive = true;
+        grid.cells[1][3].alive = true;
         cell.alive = false;
-        grid.judgementDay(cell);
-        expect(cell.alive).toBeTruthy();
+        const shouldLive = grid.judgementDay(cell);
+        expect(shouldLive).toBeTruthy();
       });
     });
   });

@@ -3,11 +3,7 @@ import Grid from "./components/Grid";
 import { Grid as GameGrid } from "./logic/game";
 
 function App() {
-  return (
-    <div className="App">
-      <Grid gameGrid={new GameGrid(10, 10)} />
-    </div>
-  );
+  return <Grid gameGrid={new GameGrid(50, 200)} />;
 }
 
 export default App;
