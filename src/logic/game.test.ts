@@ -40,5 +40,67 @@ describe("Game logic", () => {
     });
   });
 
-  describe("judgementDay", () => {});
+  describe("judgementDay", () => {
+    describe("when having fewer than two neighbours", () => {
+      it("dies", () => {
+        const grid = new Grid(10, 10, false);
+        const cell = grid.cells[0][0];
+        cell.alive = true;
+        grid.judgementDay(cell);
+        expect(cell.alive).toBeFalsy();
+      });
+    });
+
+    describe("when having 2 neighbours", () => {
+      it("survives", () => {
+        const grid = new Grid(10, 10, false);
+        const cell = grid.cells[0][0];
+        const neighbours = grid.findNeighbourCells(cell);
+        neighbours[0].alive = true;
+        neighbours[1].alive = true;
+        cell.alive = true;
+        grid.judgementDay(cell);
+        expect(cell.alive).toBeTruthy();
+      });
+    });
+
+    describe("when having 3 neighbours", () => {
+      it("survives", () => {
+        const grid = new Grid(10, 10, false);
+        const cell = grid.cells[0][0];
+        const neighbours = grid.findNeighbourCells(cell);
+        neighbours[0].alive = true;
+        neighbours[1].alive = true;
+        neighbours[2].alive = true;
+        cell.alive = true;
+        grid.judgementDay(cell);
+        expect(cell.alive).toBeTruthy();
+      });
+    });
+
+    describe("when there are more than 3 neighbours", () => {
+      it("dies", () => {
+        const grid = new Grid(10, 10, false);
+        const cell = grid.cells[2][2];
+        const neighbours = grid.findNeighbourCells(cell);
+        neighbours[0].alive = true;
+        neighbours[1].alive = true;
+        neighbours[2].alive = true;
+        neighbours[3].alive = true;
+        cell.alive = true;
+        grid.judgementDay(cell);
+        expect(cell.alive).toBeFalsy();
+      });
+    });
+
+    describe("when dead and have no neighbours", () => {
+      it("resurrects", () => {
+        const grid = new Grid(10, 10, false);
+        const cell = grid.cells[2][2];
+        cell.alive = false;
+        grid.judgementDay(cell);
+        expect(cell.alive).toBeTruthy();
+      });
+    });
+  });
 });
