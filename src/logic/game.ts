@@ -1,3 +1,14 @@
+const modifiers = [
+  [-1, -1],
+  [-1, 0],
+  [-1, +1],
+  [0, -1],
+  [0, +1],
+  [+1, -1],
+  [+1, 0],
+  [+1, +1],
+];
+
 class Grid {
   size: number;
   initialAlive: number;
@@ -17,12 +28,29 @@ class Grid {
       .sort((a, b) => a.r - b.r)
       .map((a) => a.x)
       .slice(0, this.initialAlive)
-      .forEach((cell) => (cell.alive = true));
+      .forEach((cell) => cell.awaken());
   }
 
-  update(): void {
+  updateCells(): void {
     this.cells = [...this.cells];
   }
+
+  findNeighbourCells(cell: Cell): Cell[] {
+    const { row, order } = cell;
+
+    return modifiers.flatMap(([m1, m2]) => {
+      if (row + m1 in this.cells && order + m2 in this.cells) {
+        return this.cells[row + m1][order + m2];
+      }
+      return [];
+    });
+  }
+
+  // shouldResurrect(cell: Cell): boolean {
+  //   return false;
+  // }
+
+  judgementDay(cell: Cell, neighbours: Cell[]): void {}
 
   generateMatrix(): Cell[][] {
     return new Array(this.size)
