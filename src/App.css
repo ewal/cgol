@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+.gameTable {
+  table-layout: fixed;
+}
+
+.cell {
+  background-color: pink;
+  border: solid blue 1px;
+}
+
+.alive {
+  background-color: lightblue;
+}
