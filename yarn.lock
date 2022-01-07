@@ -7622,6 +7622,53 @@ stackframe@^1.1.1:
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
 
+ste-core@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-core/-/ste-core-2.1.14.tgz#69dbb1807d35bd872ee9961a1b72d915f3c2c2c4"
+  integrity sha512-CLGwNzApXX/ZHwZDYtJOCuvaVQFftK9/5i8bY3OIHu7KpAwnqerHoT0WDvdWITpwXoc3R+Nxi7F09Jf6VbZswA==
+
+ste-events@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-events/-/ste-events-2.1.14.tgz#3a7f83169f15b84d015b230a895e9d18aea26182"
+  integrity sha512-gLncKvQk28VyFfnLcK/5MbYDAZKjdgYdz3w0pDSDp6iLgrYdg7/rlt45OfNmk24S6Dwj/Swetp9lTSSxTHsLZw==
+  dependencies:
+    ste-core "^2.1.14"
+
+ste-promise-events@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-promise-events/-/ste-promise-events-2.1.14.tgz#66dd22553ffc4aba9aa068330273227f9a634f04"
+  integrity sha512-dTPOHZuhMOOaLv1CBQhdFz2h8ZiS2Nyq2cU6BVzqaNQy6g/xzVMT3RvyZQSHyGcCYb00/a/rRQIWB9hKqEqLrA==
+  dependencies:
+    ste-core "^2.1.14"
+
+ste-promise-signals@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-promise-signals/-/ste-promise-signals-2.1.14.tgz#79a9c6f6742b1c3795d35005e518337db042b764"
+  integrity sha512-0D7nvkc46/BSdXR5iIKJME3sijQXqftHkXO4plaNlhV0KRk0UQKTc5klTo7ZaH9tG6fAGc0FEdpMgbNUWe6Fmg==
+  dependencies:
+    ste-core "^2.1.14"
+
+ste-promise-simple-events@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-promise-simple-events/-/ste-promise-simple-events-2.1.14.tgz#5027c1e38f316de636e62a811264714723aee8d8"
+  integrity sha512-WVdVFZ7KOaFFzv+s7i1jbgM4ez7JSK1hK+PcSIf1LDb70rRRk5VVgQftF/0EUJGBF/NWr18Sc7WTej7zBTMYPw==
+  dependencies:
+    ste-core "^2.1.14"
+
+ste-signals@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-signals/-/ste-signals-2.1.14.tgz#395d26c0d2a5190d7e90c9ebfaaa86554460118c"
+  integrity sha512-4t+6kXuRrrX8f8Ip2qT/QdKqS0qt1XGjspMTtotjUb2WYE4WJucMcRbvKUssATJ64RjLm6H3owPB2Prlrz4Pgw==
+  dependencies:
+    ste-core "^2.1.14"
+
+ste-simple-events@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/ste-simple-events/-/ste-simple-events-2.1.14.tgz#8e2124678c21aba618b19d49cb741939dfbf92d6"
+  integrity sha512-UDctgMWsUwkce+UqE2/HUxDpGNBbk0ww05l+OFDqU8S+jJUZYQ1rvYAmF5sBowJdd9tV4u+Zdrmp+EbshqaN5g==
+  dependencies:
+    ste-core "^2.1.14"
+
 string-length@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/string-length/-/string-length-4.0.2.tgz#a8a8dc7bd5c1a82b9b3c8b87e125f66871b6e57a"
@@ -7750,6 +7797,19 @@ strip-json-comments@^3.1.0, strip-json-comments@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
+
+strongly-typed-events@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/strongly-typed-events/-/strongly-typed-events-2.1.14.tgz#c55db5f7c7cbfe1669a1980ee4832fed6cbfc086"
+  integrity sha512-1ReJOWVi73eD2HzLMjr5tG7KWnJggh10iw0pPu/O91ek3H9SYauTaZwo8yN3yTKPz1Zg7nwmiNNF1xkSiRs5rg==
+  dependencies:
+    ste-core "^2.1.14"
+    ste-events "^2.1.14"
+    ste-promise-events "^2.1.14"
+    ste-promise-signals "^2.1.14"
+    ste-promise-simple-events "^2.1.14"
+    ste-signals "^2.1.14"
+    ste-simple-events "^2.1.14"
 
 style-loader@^3.3.1:
   version "3.3.1"
