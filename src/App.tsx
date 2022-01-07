@@ -1,9 +1,27 @@
 import "./App.css";
-import Grid from "./components/Grid";
-import { Grid as GameGrid } from "./logic/game";
 
-function App() {
-  return <Grid gameGrid={new GameGrid(50, 300)} />;
-}
+import React, { useEffect } from "react";
+import Grid from "./components/Grid";
+import Controls from "./components/Controls";
+import Game from "./logic/game";
+import Stats from "./components/Stats";
+
+const App: React.FC = () => {
+  useEffect(() => {
+    Game.getInstance().initialize({
+      refreshRate: 100,
+      size: 50,
+      initialAlive: 500,
+    });
+  }, []);
+
+  return (
+    <>
+      <Stats />
+      <Controls />
+      <Grid />
+    </>
+  );
+};
 
 export default App;

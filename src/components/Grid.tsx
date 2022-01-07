@@ -1,47 +1,43 @@
+import React from "react";
 import { useEffect, useState } from "react";
-import { Grid as GameGrid, Cell as GameCell } from "../logic/game";
-import Cell from "./Cell";
+import Game, { GameEvent } from "../logic/game";
+import { default as GameCell } from "../logic/cell";
 import Row from "./Row";
-import Stats from "./Stats";
 
-interface IProps {
-  gameGrid: GameGrid;
-}
+const styles = (n: number) => ({
+  gridTemplateRows: `repeat(${n}, 1fr)`,
+});
 
-const Grid: React.FC<IProps> = ({ gameGrid }) => {
+const Grid: React.FC = () => {
   const [state, setState] = useState<GameCell[][]>();
+  const game = Game.getInstance();
+
+  const onGameChange = (instance: Game, message: GameEvent): void => {
+    if (message === GameEvent.INIT) {
+      setState(instance.grid.cells);
+    }
+
+    if (message === GameEvent.UPDATE) {
+      setState(instance.grid.cells);
+    }
+  };
 
   useEffect(() => {
-    setState(gameGrid.cells);
-  }, [gameGrid.cells]);
+    game.onGameEvent.subscribe(onGameChange);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      gameGrid.runNewGeneration();
-      gameGrid.updateCells();
-      setState(gameGrid.cells);
-    }, 250);
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      game.onGameEvent.unsubscribe(onGameChange);
+    };
+  }, [game.onGameEvent]);
 
   const rows = state?.map((gameRow, i) => {
-    return (
-      <Row key={`row-${i}`}>
-        {gameRow.map((gameCell) => (
-          <Cell
-            key={`cell-${gameCell.row}-${gameCell.order}`}
-            cell={gameCell}
-          />
-        ))}
-      </Row>
-    );
+    return <Row key={`row-${i}`} row={gameRow} />;
   });
 
   return (
-    <>
-      <Stats gameGrid={gameGrid} />
-      <div className="gameTable">{rows}</div>
-    </>
+    <div style={styles(game.gridSize)} className="matrix">
+      {rows}
+    </div>
   );
 };
 

@@ -1,19 +1,43 @@
-import React from "react";
-import { Grid as GameGrid } from "../logic/game";
+import React, { useEffect, useState } from "react";
+import Game from "../logic/game";
 
-interface IProps {
-  gameGrid: GameGrid;
-}
+const Stats: React.FC = () => {
+  const [state, setState] = useState({ active: 0, generations: 0 });
+  const game = Game.getInstance();
 
-const Stats: React.FC<IProps> = ({ gameGrid }) => {
-  const gridSize = gameGrid.size * gameGrid.size;
+  const handleStateUpdate = (game: Game) => {
+    setState({
+      active: game.grid.activeCells.length,
+      generations: game.generations,
+    });
+  };
+
+  useEffect(() => {
+    game.onGameEvent.subscribe(handleStateUpdate);
+  }, [game.onGameEvent]);
+
   return (
-    <div className="stats">
-      Living cells: {gameGrid.activeCells.length} {" | "} Grid: {gridSize}x
-      {gridSize} {" | "}
-      Initialized with {gameGrid.initialAlive} living cells
-    </div>
+    <dl className="stats">
+      <dt>Grid</dt>
+      <dd>
+        <span>
+          {game.gridSize}x{game.gridSize}
+        </span>
+      </dd>
+      <dt>Initial cells</dt>
+      <dd>
+        <span>{game.initialAlive}</span>
+      </dd>
+      <dt>Living cells</dt>
+      <dd>
+        <span>{state?.active}</span>
+      </dd>
+      <dt>Generations</dt>
+      <dd>
+        <span>{state?.generations}</span>
+      </dd>
+    </dl>
   );
 };
 
-export default React.memo(Stats);
+export default Stats;

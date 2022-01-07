@@ -1,122 +1,139 @@
-const modifiers = [
-  [-1, -1],
-  [-1, 0],
-  [-1, +1],
-  [0, -1],
-  [0, +1],
-  [+1, -1],
-  [+1, 0],
-  [+1, +1],
-];
+import { EventDispatcher, IEvent } from "strongly-typed-events";
+import Cell from "./cell";
+import Grid from "./grid";
+import Timer from "./timer";
+import Util from "./utils";
 
-class Grid {
+type GameArgs = {
+  refreshRate: number;
   size: number;
   initialAlive: number;
-  cells: Cell[][];
+};
 
-  constructor(size = 10, initialAlive = 10) {
-    this.size = size;
-    this.initialAlive = initialAlive;
-    this.cells = this.generateMatrix();
-    this.randomizeAliveCells();
+export enum GameEvent {
+  INIT = "init",
+  START = "start",
+  STOP = "stop",
+  UPDATE = "update",
+  RESET = "reset",
+}
+
+class Game {
+  private static instance: Game;
+  private _grid: Grid;
+  private _timer: Timer;
+  private _gameStateUpdateEvent = new EventDispatcher<Game, GameEvent>();
+  private _running = false;
+  private _refreshRate = 200;
+  private _initialAlive = 100;
+  private _generations = 0;
+  private _gridSize = 0;
+
+  private constructor() {
+    this._grid = new Grid();
+    this._timer = new Timer({ timeout: this._refreshRate });
   }
 
-  randomizeAliveCells(): void {
-    this.cells
-      .flat()
-      .map((x) => ({ x, r: Math.random() }))
-      .sort((a, b) => a.r - b.r)
-      .map((a) => a.x)
-      .slice(0, this.initialAlive)
-      .forEach((cell) => (cell.alive = true));
+  private handleTimerEvent(_timer: Timer, _message: string) {
+    Game.instance.runNewGeneration();
   }
 
-  updateCells(): void {
-    this.cells = [...this.cells];
-  }
+  public runNewGeneration(): void {
+    const cells = this._grid.cells;
 
-  findNeighbourCells(cell: Cell): Cell[] {
-    const { row, order } = cell;
-
-    return modifiers.flatMap(([m1, m2]) => {
-      if (row + m1 in this.cells && order + m2 in this.cells) {
-        return this.cells[row + m1][order + m2];
-      }
-      return [];
-    });
-  }
-
-  livingNeighbours(cell: Cell): Cell[] {
-    return this.findNeighbourCells(cell).filter((n) => n.alive === true);
-  }
-
-  get activeCells(): Cell[] {
-    return this.cells.flat().filter((c) => c.alive);
-  }
-
-  runNewGeneration(): void {
-    const matrix = this.cells.map((row) => {
+    const matrix = this._grid.cells.map((row) => {
       return row.map((cell) => {
-        const shouldLive = this.judgementDay(cell);
+        const shouldLive = Util.judge(cell, cells);
+        // Mutate or return new?
         return new Cell(cell.row, cell.order, shouldLive);
       });
     });
 
-    this.cells = matrix;
+    this._generations = this._generations + 1;
+    this._grid.cells = matrix;
+    this.signal(GameEvent.UPDATE);
   }
 
-  judgementDay(cell: Cell): boolean | undefined {
-    const neighbours = this.livingNeighbours(cell);
+  public get onGameEvent(): IEvent<Game, GameEvent> {
+    return this._gameStateUpdateEvent.asEvent();
+  }
 
-    if (cell.alive) {
-      if (neighbours.length < 2) {
-        return false;
-      }
-      if (neighbours.length === 2) {
-        return true;
-      }
-      if (neighbours.length === 3) {
-        return true;
-      }
-      if (neighbours.length > 3) {
-        return false;
-      }
-    } else {
-      if (neighbours.length === 3) {
-        return true;
-      }
+  public signal(message: GameEvent) {
+    if (message) {
+      this._gameStateUpdateEvent.dispatch(this, message);
     }
-    return undefined;
   }
 
-  generateMatrix(): Cell[][] {
-    return new Array(this.size)
-      .fill(0)
-      .map((_n: unknown, index: number) => index)
-      .map((rowIndex: number) => {
-        return new Array(this.size)
-          .fill(0)
-          .map(
-            (_n: unknown, cellIndex: number) => new Cell(rowIndex, cellIndex)
-          );
-      });
+  public static getInstance(): Game {
+    if (!Game.instance) {
+      Game.instance = new Game();
+    }
+
+    return Game.instance;
+  }
+
+  public initialize(data: GameArgs) {
+    this._initialAlive = data.initialAlive;
+    this._refreshRate = data.refreshRate;
+    this._gridSize = data.size;
+    this._timer.timeout = data.refreshRate;
+
+    this._grid.cells = this._grid.generateMatrix(data.size);
+    this._grid.randomizeAliveCells(this._initialAlive);
+    this._timer.onTimerEvent.subscribe(this.handleTimerEvent);
+
+    this.signal(GameEvent.INIT);
+  }
+
+  start() {
+    this._running = true;
+    this._timer.start();
+    this.signal(GameEvent.START);
+  }
+
+  stop() {
+    this._running = false;
+    this._timer.pause();
+    this.signal(GameEvent.STOP);
+  }
+
+  reset() {
+    this._running = false;
+    this._generations = 0;
+    this._timer.onTimerEvent.unsubscribe(this.handleTimerEvent);
+    this.signal(GameEvent.RESET);
+  }
+
+  randomizeCells() {
+    this._grid.killEmAll();
+    this._grid.randomizeAliveCells(this._initialAlive);
+    this._grid.updateCells();
+    this.signal(GameEvent.UPDATE);
+  }
+
+  get isRunning(): boolean {
+    return this._running;
+  }
+
+  get initialAlive(): number {
+    return this._initialAlive;
+  }
+
+  get timer(): Timer {
+    return this._timer;
+  }
+
+  get grid(): Grid {
+    return this._grid;
+  }
+
+  get generations(): number {
+    return this._generations;
+  }
+
+  get gridSize(): number {
+    return this._gridSize;
   }
 }
 
-class Cell {
-  row: number;
-  order: number;
-  alive: boolean;
-
-  constructor(row: number, order: number, alive = false) {
-    this.row = row;
-    this.order = order;
-    this.alive = alive;
-  }
-
-  toggle(): void {
-    this.alive = !this.alive;
-  }
-}
-
-export { Grid, Cell };
+export default Game;

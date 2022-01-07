@@ -1,55 +1,105 @@
 body {
+  padding: 0;
+  margin: 0;
   display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: #0d0208;
+  background-color: #000;
   justify-content: center;
   align-items: center;
   color: #00ff41;
 }
 
-.gameTable {
+.matrix {
   display: grid;
-  grid-template-rows: repeat(50, 1fr);
   grid-auto-flow: row;
-  width: 98vh;
-  height: 98vh;
-  grid-row-gap: 2px;
+  width: 97vh;
+  height: 97vh;
+  grid-row-gap: 1px;
   box-shadow: 0 0 10px 4px #111;
-  background-color: #008f11;
-  border: solid 2px #008f11;
   transform: perspective(100px) rotateX(5deg) translateY(-150px);
+  /* transform: perspective(100px) rotateX(3deg) rotateY(3deg) rotateZ(3deg) */
+  /*   translateY(-150px); */
 }
 
 .row {
   display: grid;
   grid-auto-flow: row;
-  grid-template-columns: repeat(50, 1fr);
-  grid-column-gap: 2px;
+  grid-column-gap: 1px;
 }
 
 .cell {
-  background-color: #003b00;
-  box-shadow: 1px 1px 1px 1px #0d0208 inset;
-  transition: background-color 0.5s;
+  box-shadow: 0 0 1px 1px #0d0208 inset;
+  transition: background-color 0.25s ease-out;
+  border: solid #003b00 1px;
 }
 
 .cell:hover {
-  background-color: #00ff41;
-  transition: background-color 0.1s;
+  background-color: #008f11;
+  transition: background-color 0s;
+}
+.alive:hover {
+  transition: background-color 0s;
 }
 
 .alive {
   background-color: #00ff41;
-  /* box-shadow: 1px  2px 2px #0d0208 inset; */
+  box-shadow: 0 0 1px 1px #0d0208 inset;
+  transition: background-color 0.5s ease-out;
 }
 
 .stats {
-  display: flex;
-  padding-top: 15px;
+  display: grid;
+  padding: 0;
   position: absolute;
   left: 0;
-  right: 0;
   top: 0;
   justify-content: center;
+  background-color: #003b00;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  overflow: hidden;
+  row-gap: 16px;
+  justify-content: space-between;
+  min-width: 200px;
+  opacity: 0.7;
+  transform: perspective(100px) rotateY(5deg) translateY(50px) translateX(50px);
+  border: solid 16px #003b00;
+}
+
+.stats dt {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.stats dt,
+.stats dd {
+  /* margin: 0 16px; */
+}
+
+.stats dt:after {
+  white-space: nowrap;
+  width: 0;
+  position: absolute;
+  content: ". . . . . . . . . . . . . . . . . . . . ";
+  margin-left: 4px;
+}
+
+.stats dd {
+  background-color: #003b00;
+  text-align: right;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.stats dd span {
+  background-color: #003b00;
+  position: relative;
+  z-index: 100;
+  padding-left: 4px;
 }
