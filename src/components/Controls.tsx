@@ -1,8 +1,9 @@
+import "./Controls.css";
 import Game from "../logic/game";
 
-const Controls: React.FC = () => {
-  const game = Game.getInstance();
+const game = Game.getInstance();
 
+const Controls: React.FC = () => {
   const handleStartStop = () => {
     if (game.isRunning) {
       game.stop();
@@ -15,21 +16,30 @@ const Controls: React.FC = () => {
     game.reset();
   };
 
-  const handleRandomize = () => {
-    game.randomizeCells();
+  const handleFaster = () => {
+    game.faster();
+  };
+
+  const handleSlower = () => {
+    game.slower();
   };
 
   return (
-    <div style={{ position: "absolute", right: 300 }}>
+    <div className="controls">
       <button type="button" onClick={handleStartStop}>
         Start / pause
       </button>
       <button type="button" onClick={handleReset}>
         Reset
       </button>
-      <button type="button" onClick={handleRandomize}>
-        Randomize
-      </button>
+      <div className="group">
+        <button type="button" onClick={handleSlower}>
+          Slower
+        </button>
+        <button type="button" onClick={handleFaster}>
+          Faster
+        </button>
+      </div>
     </div>
   );
 };

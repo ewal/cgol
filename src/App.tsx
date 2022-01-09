@@ -9,18 +9,28 @@ import Stats from "./components/Stats";
 const App: React.FC = () => {
   useEffect(() => {
     Game.getInstance().initialize({
-      refreshRate: 100,
-      size: 50,
-      initialAlive: 500,
+      refreshRate: 1000,
+      gridDimension: {
+        x: 80,
+        y: 80,
+      },
+      initialAlive: 800,
     });
   }, []);
 
   return (
-    <>
-      <Stats />
-      <Controls />
-      <Grid />
-    </>
+    <div className="grid">
+      <aside className="left">
+        <h1>Conway's GOL</h1>
+        <div className="separator" />
+        <Stats />
+        <div className="separator" />
+        <Controls />
+      </aside>
+      <main className="right">
+        <Grid />
+      </main>
+    </div>
   );
 };
 

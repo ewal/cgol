@@ -1,3 +1,4 @@
+import "./Cell.css";
 import React from "react";
 import { useCallback } from "react";
 import { default as GameCell } from "../logic/cell";

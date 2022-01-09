@@ -1,0 +1,28 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-medium);
+}
+
+.controls button {
+  font-size: var(--size-base);
+  background-color: var(--bg_visual_blue);
+  color: var(--blue);
+  padding: var(--size-medium);
+}
+
+.controls button:hover {
+  color: var(--aqua);
+}
+
+.controls .group {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: space-between;
+  column-gap: var(--size-medium);
+}
+
+.controls .group button {
+  flex: 1;
+}

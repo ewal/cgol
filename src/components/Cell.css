@@ -1,0 +1,22 @@
+.cell {
+  border: solid 1px var(--bg_visual_green);
+  /* transition-duration: 1500ms; */
+  /* transition-property: background-color; */
+  /* transition-timing-function: ease-out; */
+}
+
+.cell:hover {
+  border-color: var(--red);
+  transition: background-color 0s;
+}
+
+.alive:hover {
+  transition: background-color 0s;
+}
+
+.alive {
+  background-color: var(--green);
+  /* transition-property: background-color; */
+  /* transition-duration: 1000ms; */
+  /* transition-timing-function: ease-out; */
+}

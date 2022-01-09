@@ -1,0 +1,10 @@
+.matrix {
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 1px;
+  width: 85vh;
+  height: 85vh;
+  box-shadow: 0 0 var(--size-small) var(--size-small) var(--shadow-color);
+  border: solid 1px var(--bg_visual_green);
+  padding: 1px;
+}

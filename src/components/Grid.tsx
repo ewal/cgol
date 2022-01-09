@@ -1,3 +1,4 @@
+import "./Grid.css";
 import React from "react";
 import { useEffect, useState } from "react";
 import Game, { GameEvent } from "../logic/game";
@@ -35,7 +36,7 @@ const Grid: React.FC = () => {
   });
 
   return (
-    <div style={styles(game.gridSize)} className="matrix">
+    <div style={styles(game.gridDimension.x)} className="matrix">
       {rows}
     </div>
   );
