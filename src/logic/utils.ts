@@ -1,7 +1,23 @@
 import Cell from "./cell";
 
 class Util {
-  private static modifiers: number[][] = [
+  // static readonly firstRowDir: number[][] = [
+  //   [0, -1],
+  //   [0, +1],
+  //   [+1, -1],
+  //   [+1, 0],
+  //   [+1, +1],
+  // ];
+
+  // static readonly lastRowDir: number[][] = [
+  //   [-1, -1],
+  //   [-1, 0],
+  //   [-1, +1],
+  //   [0, -1],
+  //   [0, +1],
+  // ];
+
+  static readonly neighbourDirections: number[][] = [
     [-1, -1],
     [-1, 0],
     [-1, +1],
@@ -17,7 +33,7 @@ class Util {
   public static findNeighbourCells(cell: Cell, cells: Cell[][]): Cell[] {
     const { row, order } = cell;
 
-    return this.modifiers.flatMap(([m1, m2]) => {
+    return this.neighbourDirections.flatMap(([m1, m2]) => {
       if (row + m1 in cells && order + m2 in cells) {
         return cells[row + m1][order + m2];
       }
@@ -37,7 +53,8 @@ class Util {
   }
 
   public static shouldDie(cell: Cell, cells: Cell[][]): boolean {
-    const neighbours = Util.livingNeighbours(cell, cells);
+    const neighbours = this.livingNeighbours(cell, cells);
+
     if (neighbours.length < 2) {
       return false;
     }

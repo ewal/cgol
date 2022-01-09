@@ -4,9 +4,14 @@ import Grid from "./grid";
 import Timer from "./timer";
 import Util from "./utils";
 
+export type GridDimension = {
+  x: number;
+  y: number;
+};
+
 type GameArgs = {
   refreshRate: number;
-  size: number;
+  gridDimension: GridDimension;
   initialAlive: number;
 };
 
@@ -16,6 +21,7 @@ export enum GameEvent {
   STOP = "stop",
   UPDATE = "update",
   RESET = "reset",
+  SETTING_CHANGE = "arg_change",
 }
 
 class Game {
@@ -24,18 +30,26 @@ class Game {
   private _timer: Timer;
   private _gameStateUpdateEvent = new EventDispatcher<Game, GameEvent>();
   private _running = false;
-  private _refreshRate = 200;
+  private _refreshRate = 100;
   private _initialAlive = 100;
-  private _generations = 0;
-  private _gridSize = 0;
+  private _gridDimension: GridDimension = { x: 10, y: 10 };
+  // private _handOfGod = 0;
 
   private constructor() {
     this._grid = new Grid();
-    this._timer = new Timer({ timeout: this._refreshRate });
+    this._timer = new Timer();
   }
 
   private handleTimerEvent(_timer: Timer, _message: string) {
-    Game.instance.runNewGeneration();
+    if (_message === "NEW_TICK") {
+      Game.instance.runNewGeneration();
+    }
+  }
+
+  private signal(message: GameEvent) {
+    if (message) {
+      this._gameStateUpdateEvent.dispatch(this, message);
+    }
   }
 
   public runNewGeneration(): void {
@@ -49,19 +63,12 @@ class Game {
       });
     });
 
-    this._generations = this._generations + 1;
     this._grid.cells = matrix;
     this.signal(GameEvent.UPDATE);
   }
 
   public get onGameEvent(): IEvent<Game, GameEvent> {
     return this._gameStateUpdateEvent.asEvent();
-  }
-
-  public signal(message: GameEvent) {
-    if (message) {
-      this._gameStateUpdateEvent.dispatch(this, message);
-    }
   }
 
   public static getInstance(): Game {
@@ -75,10 +82,8 @@ class Game {
   public initialize(data: GameArgs) {
     this._initialAlive = data.initialAlive;
     this._refreshRate = data.refreshRate;
-    this._gridSize = data.size;
-    this._timer.timeout = data.refreshRate;
-
-    this._grid.cells = this._grid.generateMatrix(data.size);
+    this._gridDimension = data.gridDimension;
+    this._grid.cells = this._grid.generateMatrix(data.gridDimension);
     this._grid.randomizeAliveCells(this._initialAlive);
     this._timer.onTimerEvent.subscribe(this.handleTimerEvent);
 
@@ -87,7 +92,7 @@ class Game {
 
   start() {
     this._running = true;
-    this._timer.start();
+    this._timer.start(this._refreshRate);
     this.signal(GameEvent.START);
   }
 
@@ -99,16 +104,14 @@ class Game {
 
   reset() {
     this._running = false;
-    this._generations = 0;
     this._timer.onTimerEvent.unsubscribe(this.handleTimerEvent);
+    this._timer.reset();
+    this.initialize({
+      refreshRate: this._refreshRate,
+      initialAlive: this._initialAlive,
+      gridDimension: this._gridDimension,
+    });
     this.signal(GameEvent.RESET);
-  }
-
-  randomizeCells() {
-    this._grid.killEmAll();
-    this._grid.randomizeAliveCells(this._initialAlive);
-    this._grid.updateCells();
-    this.signal(GameEvent.UPDATE);
   }
 
   get isRunning(): boolean {
@@ -128,11 +131,32 @@ class Game {
   }
 
   get generations(): number {
-    return this._generations;
+    return this._timer.ticks;
   }
 
-  get gridSize(): number {
-    return this._gridSize;
+  get gridDimension(): GridDimension {
+    return this._gridDimension;
+  }
+
+  public faster(): void {
+    const rate = this._refreshRate <= 50 ? 10 : 50;
+    if (this._refreshRate > 10) {
+      this._refreshRate = this._refreshRate - rate;
+      this._timer.start(this._refreshRate);
+      this.signal(GameEvent.SETTING_CHANGE);
+    }
+  }
+
+  public slower(): void {
+    const rate = this._refreshRate < 50 ? 10 : 50;
+
+    this._refreshRate = this._refreshRate + rate;
+    this._timer.start(this._refreshRate);
+    this.signal(GameEvent.SETTING_CHANGE);
+  }
+
+  get refreshRate(): number {
+    return this._refreshRate;
   }
 }
 

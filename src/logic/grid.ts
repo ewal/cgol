@@ -1,5 +1,5 @@
 import Cell from "./cell";
-import Util from "./utils";
+import { GridDimension } from "./game";
 
 class Grid {
   cells: Cell[][] = [];
@@ -14,20 +14,12 @@ class Grid {
       .forEach((cell) => (cell.alive = true));
   }
 
-  public updateCells(): void {
-    this.cells = [...this.cells];
-  }
-
-  public killEmAll(): void {
-    this.cells.flat().forEach((c) => (c.alive = false));
-  }
-
-  public generateMatrix(size: number): Cell[][] {
-    return new Array(size)
+  public generateMatrix(gridDimension: GridDimension): Cell[][] {
+    return new Array(gridDimension.y)
       .fill(0)
       .map((_n: unknown, index: number) => index)
       .map((rowIndex: number) => {
-        return new Array(size)
+        return new Array(gridDimension.x)
           .fill(0)
           .map(
             (_n: unknown, cellIndex: number) => new Cell(rowIndex, cellIndex)

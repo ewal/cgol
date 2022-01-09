@@ -1,4 +1,3 @@
-import exp from "constants";
 import Cell from "./cell";
 
 describe("Cell", () => {

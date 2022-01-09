@@ -2,14 +2,16 @@ import Game from "./game";
 import Cell from "./cell";
 import Util from "./utils";
 import Grid from "./grid";
-import exp from "constants";
 
 describe("Util", () => {
   describe("findNeighbourCells", () => {
     const game = Game.getInstance();
 
     beforeAll(() => {
-      game.grid.cells = Game.getInstance().grid.generateMatrix(20);
+      game.grid.cells = Game.getInstance().grid.generateMatrix({
+        x: 20,
+        y: 20,
+      });
     });
 
     it("returns a list of Cell classes", () => {
@@ -45,14 +47,20 @@ describe("Util", () => {
     });
 
     it("not awaken cell if less than 3 neighbours are alive", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       cell.alive = Util.shouldAwaken(cell, cells);
       expect(cell.alive).toBeFalsy();
     });
 
     it("should awaken cell if there are exactly 3 living neighbours", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[2][2];
       cell.alive = false;
 
@@ -74,7 +82,10 @@ describe("Util", () => {
     });
 
     it("dies when having fewer than two neighbours", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       cell.alive = true;
       const shouldLive = Util.judge(cell, cells);
@@ -82,7 +93,10 @@ describe("Util", () => {
     });
 
     it("survives if it has 2 living neighbours", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       const neighbours = Util.findNeighbourCells(cell, cells);
       neighbours[0].alive = true;
@@ -93,7 +107,10 @@ describe("Util", () => {
     });
 
     it("survives if it has 3 living neighbours", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       const neighbours = Util.findNeighbourCells(cell, cells);
       neighbours[0].alive = true;
@@ -105,7 +122,10 @@ describe("Util", () => {
     });
 
     it("dies if there are more than 3 neighbours", () => {
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[2][2];
       const neighbours = Util.findNeighbourCells(cell, cells);
       neighbours[0].alive = true;
@@ -119,22 +139,29 @@ describe("Util", () => {
   });
 
   describe("judge", () => {
+    let grid: Grid;
+
     beforeAll(() => {
+      grid = new Grid();
       Util.shouldAwaken = jest.fn();
       Util.shouldDie = jest.fn();
     });
 
     it("uses shouldAwaken when dead", () => {
-      const grid = new Grid();
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       Util.judge(cell, cells);
       expect(Util.shouldAwaken).toHaveBeenCalled();
     });
 
     it("uses shouldDie when alive", () => {
-      const grid = new Grid();
-      const cells = grid.generateMatrix(10);
+      const cells = grid.generateMatrix({
+        x: 10,
+        y: 10,
+      });
       const cell = cells[0][0];
       cell.alive = true;
       Util.judge(cell, cells);
