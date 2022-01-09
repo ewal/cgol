@@ -1,20 +1,9 @@
 import { EventDispatcher, IEvent } from "strongly-typed-events";
 
-type TimerConstructorArgs = {
-  timeout: number;
-};
-
 class Timer {
-  private _interval: NodeJS.Timer;
-  private _ticks: number;
+  private _ticks = 0;
+  private _handler = 0;
   private _timerEvent = new EventDispatcher<Timer, string>();
-  timeout: number;
-
-  constructor(args: TimerConstructorArgs) {
-    this.timeout = args.timeout;
-    this._ticks = 0;
-    this._interval = setInterval(() => {}, args.timeout);
-  }
 
   public signal(message: string) {
     if (message) {
@@ -22,15 +11,35 @@ class Timer {
     }
   }
 
-  public start() {
-    this._interval = setInterval(() => {
-      this._ticks = this._ticks + 1;
-      this.signal("tick");
-    }, this.timeout);
+  public start(timer: number) {
+    let start = new Date().getTime();
+
+    cancelAnimationFrame(this._handler);
+
+    const loop = () => {
+      const current = new Date().getTime();
+      const delta = current - start;
+
+      if (delta >= timer) {
+        this._ticks = this._ticks + 1;
+        start = new Date().getTime();
+        this.signal("NEW_TICK");
+      }
+
+      this._handler = requestAnimationFrame(loop);
+    };
+
+    requestAnimationFrame(loop);
   }
 
   public pause() {
-    clearInterval(this._interval);
+    cancelAnimationFrame(this._handler);
+  }
+
+  public reset() {
+    this.pause();
+    this._ticks = 0;
+    this._handler = 0;
   }
 
   public get onTimerEvent(): IEvent<Timer, string> {
