@@ -1,13 +1,8 @@
 import { EventDispatcher, IEvent } from "strongly-typed-events";
 import Cell from "./cell";
-import Grid from "./grid";
+import Grid, { GridDimension } from "./grid";
 import Timer, { TimerEvent } from "./timer";
 import Util from "./utils";
-
-export type GridDimension = {
-  x: number;
-  y: number;
-};
 
 type GameArgs = {
   refreshRate: number;

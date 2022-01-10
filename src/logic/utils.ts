@@ -12,7 +12,10 @@ class Util {
     [1, 1],
   ];
 
-  public static findNeighbourCells(cell: Cell, cells: Cell[][]): Cell[] {
+  // TODO:
+  // Could this be even faster using different direction arrays
+  // for first and last rows + first and last last cells?
+  static findNeighbourCells(cell: Cell, cells: Cell[][]): Cell[] {
     const { row, order } = cell;
 
     return this.neighbourDirections.flatMap(([rowMod, orderMod]) => {
@@ -23,18 +26,18 @@ class Util {
     });
   }
 
-  public static livingNeighbours(cell: Cell, cells: Cell[][]): Cell[] {
+  static livingNeighbours(cell: Cell, cells: Cell[][]): Cell[] {
     return this.findNeighbourCells(cell, cells).filter((n) => n.alive === true);
   }
 
-  public static judge(cell: Cell, cells: Cell[][]): boolean {
+  static judge(cell: Cell, cells: Cell[][]): boolean {
     if (cell.alive) {
       return Util.shouldDie(cell, cells);
     }
     return Util.shouldAwaken(cell, cells);
   }
 
-  public static shouldDie(cell: Cell, cells: Cell[][]): boolean {
+  static shouldDie(cell: Cell, cells: Cell[][]): boolean {
     const nNeighbours = this.livingNeighbours(cell, cells).length;
 
     if (nNeighbours < 2 || nNeighbours > 3) {
@@ -46,6 +49,7 @@ class Util {
 
   static shouldAwaken(cell: Cell, cells: Cell[][]): boolean {
     const neighbours = Util.livingNeighbours(cell, cells);
+
     if (neighbours.length === 3) {
       return true;
     }

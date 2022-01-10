@@ -9,13 +9,13 @@ class Timer {
   private _handler = 0;
   private _timerEvent = new EventDispatcher<Timer, string>();
 
-  public signal(message: string) {
+  private signal(message: string) {
     if (message) {
       this._timerEvent.dispatch(this, message);
     }
   }
 
-  public start(timer: number) {
+  start(timer: number) {
     let start = new Date().getTime();
 
     cancelAnimationFrame(this._handler);
@@ -37,25 +37,25 @@ class Timer {
     requestAnimationFrame(loop);
   }
 
-  public pause() {
+  pause() {
     cancelAnimationFrame(this._handler);
   }
 
-  public reset() {
+  reset() {
     this.pause();
     this._ticks = 0;
     this._handler = 0;
   }
 
-  public get onTimerEvent(): IEvent<Timer, string> {
+  get onTimerEvent(): IEvent<Timer, string> {
     return this._timerEvent.asEvent();
   }
 
-  public get ticks(): number {
+  get ticks(): number {
     return this._ticks;
   }
 
-  public get handler(): number {
+  get handler(): number {
     return this._handler;
   }
 }

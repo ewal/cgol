@@ -1,10 +1,14 @@
 import Cell from "./cell";
-import { GridDimension } from "./game";
+
+export type GridDimension = {
+  x: number;
+  y: number;
+};
 
 class Grid {
   cells: Cell[][] = [];
 
-  public randomizeAliveCells(population: number): void {
+  randomizeAliveCells(population: number): void {
     this.cells
       .flat()
       .map((x) => ({ x, r: Math.random() }))
@@ -14,7 +18,7 @@ class Grid {
       .forEach((cell) => (cell.alive = true));
   }
 
-  public generateMatrix(gridDimension: GridDimension): Cell[][] {
+  generateMatrix(gridDimension: GridDimension): Cell[][] {
     return new Array(gridDimension.y)
       .fill(0)
       .map((_n: unknown, index: number) => index)
@@ -27,7 +31,7 @@ class Grid {
       });
   }
 
-  public get activeCells(): Cell[] {
+  get activeCells(): Cell[] {
     return this.cells.flat().filter((c) => c.alive);
   }
 }

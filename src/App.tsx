@@ -3,8 +3,9 @@ import "./App.css";
 import React, { useEffect } from "react";
 import Grid from "./components/Grid";
 import Controls from "./components/Controls";
-import Game, { GridDimension } from "./logic/game";
+import Game from "./logic/game";
 import Stats from "./components/Stats";
+import { GridDimension } from "./logic/grid";
 
 const App: React.FC = () => {
   useEffect(() => {

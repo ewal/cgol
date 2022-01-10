@@ -1,4 +1,3 @@
-import exp from "constants";
 import Timer from "./timer";
 
 describe("timer", () => {
