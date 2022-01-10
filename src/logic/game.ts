@@ -33,7 +33,8 @@ class Game {
   private _refreshRate = 100;
   private _initialAlive = 100;
   private _gridDimension: GridDimension = { x: 10, y: 10 };
-  // private _handOfGod = 0;
+  private _handOfGod = 0;
+  private _touchedByGod: Cell[] = [];
 
   private constructor() {
     this._grid = new Grid();
@@ -52,26 +53,7 @@ class Game {
     }
   }
 
-  public runNewGeneration(): void {
-    const cells = this._grid.cells;
-
-    const matrix = this._grid.cells.map((row) => {
-      return row.map((cell) => {
-        const shouldLive = Util.judge(cell, cells);
-        // Mutate or return new?
-        return new Cell(cell.row, cell.order, shouldLive);
-      });
-    });
-
-    this._grid.cells = matrix;
-    this.signal(GameEvent.UPDATE);
-  }
-
-  public get onGameEvent(): IEvent<Game, GameEvent> {
-    return this._gameStateUpdateEvent.asEvent();
-  }
-
-  public static getInstance(): Game {
+  static getInstance(): Game {
     if (!Game.instance) {
       Game.instance = new Game();
     }
@@ -79,7 +61,7 @@ class Game {
     return Game.instance;
   }
 
-  public initialize(data: GameArgs) {
+  initialize(data: GameArgs) {
     this._initialAlive = data.initialAlive;
     this._refreshRate = data.refreshRate;
     this._gridDimension = data.gridDimension;
@@ -88,6 +70,20 @@ class Game {
     this._timer.onTimerEvent.subscribe(this.handleTimerEvent);
 
     this.signal(GameEvent.INIT);
+  }
+
+  runNewGeneration(): void {
+    const cells = this._grid.cells;
+
+    const matrix = cells.map((row) => {
+      return row.map((cell) => {
+        const shouldLive = Util.judge(cell, cells);
+        return new Cell(cell.row, cell.order, shouldLive);
+      });
+    });
+
+    this._grid.cells = matrix;
+    this.signal(GameEvent.UPDATE);
   }
 
   start() {
@@ -106,12 +102,50 @@ class Game {
     this._running = false;
     this._timer.onTimerEvent.unsubscribe(this.handleTimerEvent);
     this._timer.reset();
+    this._touchedByGod = [];
     this.initialize({
       refreshRate: this._refreshRate,
       initialAlive: this._initialAlive,
       gridDimension: this._gridDimension,
     });
     this.signal(GameEvent.RESET);
+  }
+
+  faster(): void {
+    const rate = this._refreshRate <= 50 ? 10 : 50;
+    if (this._refreshRate > 10) {
+      this._refreshRate = this._refreshRate - rate;
+      this._timer.start(this._refreshRate);
+      this.signal(GameEvent.SETTING_CHANGE);
+    }
+  }
+
+  slower(): void {
+    const rate = this._refreshRate < 50 ? 10 : 50;
+
+    this._refreshRate = this._refreshRate + rate;
+    this._timer.start(this._refreshRate);
+    this.signal(GameEvent.SETTING_CHANGE);
+  }
+
+  interfere(cell: Cell) {
+    cell.toggle();
+
+    this._touchedByGod = [...this._touchedByGod, cell];
+    this._handOfGod = this._handOfGod + 1;
+
+    if (!this._running) {
+      const matrix = this._grid.cells.map((row) => {
+        return row.map((c) => {
+          if (c === cell) {
+            return new Cell(cell.row, cell.order, cell.alive);
+          }
+          return c;
+        });
+      });
+      this._grid.cells = matrix;
+      this.signal(GameEvent.UPDATE);
+    }
   }
 
   get isRunning(): boolean {
@@ -138,25 +172,16 @@ class Game {
     return this._gridDimension;
   }
 
-  public faster(): void {
-    const rate = this._refreshRate <= 50 ? 10 : 50;
-    if (this._refreshRate > 10) {
-      this._refreshRate = this._refreshRate - rate;
-      this._timer.start(this._refreshRate);
-      this.signal(GameEvent.SETTING_CHANGE);
-    }
-  }
-
-  public slower(): void {
-    const rate = this._refreshRate < 50 ? 10 : 50;
-
-    this._refreshRate = this._refreshRate + rate;
-    this._timer.start(this._refreshRate);
-    this.signal(GameEvent.SETTING_CHANGE);
+  get onGameEvent(): IEvent<Game, GameEvent> {
+    return this._gameStateUpdateEvent.asEvent();
   }
 
   get refreshRate(): number {
     return this._refreshRate;
+  }
+
+  get interference(): number {
+    return this._handOfGod;
   }
 }
 

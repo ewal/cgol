@@ -1,16 +1,18 @@
 import "./Cell.css";
-import React from "react";
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import { default as GameCell } from "../logic/cell";
+import Game from "../logic/game";
 
 interface IProps {
   alive: boolean; // Enables usage of React.memo
   cell: GameCell;
 }
 
+const game = Game.getInstance();
+
 const Cell: React.FC<IProps> = ({ alive, cell }) => {
   const handleClick = useCallback(() => {
-    cell.toggle();
+    game.interfere(cell);
   }, [cell]);
 
   return (
@@ -22,4 +24,4 @@ const Cell: React.FC<IProps> = ({ alive, cell }) => {
   );
 };
 
-export default React.memo(Cell);
+export default memo(Cell);

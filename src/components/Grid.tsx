@@ -9,9 +9,10 @@ const styles = (n: number) => ({
   gridTemplateRows: `repeat(${n}, 1fr)`,
 });
 
+const game = Game.getInstance();
+
 const Grid: React.FC = () => {
   const [state, setState] = useState<GameCell[][]>();
-  const game = Game.getInstance();
 
   const onGameChange = (instance: Game, message: GameEvent): void => {
     if (message === GameEvent.INIT) {
@@ -29,14 +30,14 @@ const Grid: React.FC = () => {
     return () => {
       game.onGameEvent.unsubscribe(onGameChange);
     };
-  }, [game.onGameEvent]);
+  }, []);
 
-  const rows = state?.map((gameRow, i) => {
-    return <Row key={`row-${i}`} row={gameRow} />;
+  const rows = state?.map((gameRow, index) => {
+    return <Row key={`row-${index}`} row={gameRow} />;
   });
 
   return (
-    <div style={styles(game.gridDimension.x)} className="matrix">
+    <div style={styles(game.gridDimension.y)} className="matrix">
       {rows}
     </div>
   );

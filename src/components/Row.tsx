@@ -1,5 +1,5 @@
 import "./Row.css";
-import React from "react";
+import { memo } from "react";
 import Game from "../logic/game";
 import { default as GameCell } from "../logic/cell";
 import Cell from "./Cell";
@@ -29,4 +29,4 @@ const Row: React.FC<IProps> = ({ row }) => {
   );
 };
 
-export default React.memo(Row);
+export default memo(Row);
