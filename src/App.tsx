@@ -3,18 +3,18 @@ import "./App.css";
 import React, { useEffect } from "react";
 import Grid from "./components/Grid";
 import Controls from "./components/Controls";
-import Game from "./logic/game";
+import Game, { GridDimension } from "./logic/game";
 import Stats from "./components/Stats";
 
 const App: React.FC = () => {
   useEffect(() => {
+    const gridDimension: GridDimension = { x: 50, y: 50 };
+    const initialAlive = gridDimension.x * gridDimension.y * 0.15;
+
     Game.getInstance().initialize({
-      refreshRate: 1000,
-      gridDimension: {
-        x: 80,
-        y: 80,
-      },
-      initialAlive: 800,
+      refreshRate: 100,
+      gridDimension,
+      initialAlive,
     });
   }, []);
 
