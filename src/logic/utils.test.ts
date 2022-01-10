@@ -3,11 +3,25 @@ import Cell from "./cell";
 import Util from "./utils";
 import Grid from "./grid";
 
+const findMedian = (arr = []) => {
+  const sorted = arr.slice().sort((a, b) => {
+    return a - b;
+  });
+  if (sorted.length % 2 === 0) {
+    const first = sorted[sorted.length / 2 - 1];
+    const second = sorted[sorted.length / 2];
+    return (first + second) / 2;
+  } else {
+    const mid = Math.floor(sorted.length / 2);
+    return sorted[mid];
+  }
+};
+
 describe("Util", () => {
   describe("findNeighbourCells", () => {
     const game = Game.getInstance();
 
-    beforeAll(() => {
+    beforeEach(() => {
       game.grid.cells = Game.getInstance().grid.generateMatrix({
         x: 20,
         y: 20,
@@ -27,12 +41,13 @@ describe("Util", () => {
         game.grid.cells[0][0],
         game.grid.cells
       );
+
       expect(neighbours.length).toBe(3);
     });
 
     it("returns all eight neighbours for a non edge cell", () => {
       const neighbours = Util.findNeighbourCells(
-        game.grid.cells[3][3],
+        game.grid.cells[2][2],
         game.grid.cells
       );
       expect(neighbours.length).toBe(8);
