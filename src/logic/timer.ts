@@ -1,5 +1,9 @@
 import { EventDispatcher, IEvent } from "strongly-typed-events";
 
+export enum TimerEvent {
+  TICK = "tick",
+}
+
 class Timer {
   private _ticks = 0;
   private _handler = 0;
@@ -23,9 +27,10 @@ class Timer {
       if (delta >= timer) {
         this._ticks = this._ticks + 1;
         start = new Date().getTime();
-        this.signal("NEW_TICK");
+        this.signal(TimerEvent.TICK);
       }
 
+      cancelAnimationFrame(this._handler);
       this._handler = requestAnimationFrame(loop);
     };
 
@@ -48,6 +53,10 @@ class Timer {
 
   public get ticks(): number {
     return this._ticks;
+  }
+
+  public get handler(): number {
+    return this._handler;
   }
 }
 

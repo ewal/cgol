@@ -1,7 +1,7 @@
 import { EventDispatcher, IEvent } from "strongly-typed-events";
 import Cell from "./cell";
 import Grid from "./grid";
-import Timer from "./timer";
+import Timer, { TimerEvent } from "./timer";
 import Util from "./utils";
 
 export type GridDimension = {
@@ -42,7 +42,7 @@ class Game {
   }
 
   private handleTimerEvent(_timer: Timer, _message: string) {
-    if (_message === "NEW_TICK") {
+    if (_message === TimerEvent.TICK) {
       Game.instance.runNewGeneration();
     }
   }
@@ -65,8 +65,10 @@ class Game {
     this._initialAlive = data.initialAlive;
     this._refreshRate = data.refreshRate;
     this._gridDimension = data.gridDimension;
+
     this._grid.cells = this._grid.generateMatrix(data.gridDimension);
     this._grid.randomizeAliveCells(this._initialAlive);
+
     this._timer.onTimerEvent.subscribe(this.handleTimerEvent);
 
     this.signal(GameEvent.INIT);
