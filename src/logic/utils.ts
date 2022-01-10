@@ -1,41 +1,23 @@
 import Cell from "./cell";
 
 class Util {
-  // static readonly firstRowDir: number[][] = [
-  //   [0, -1],
-  //   [0, +1],
-  //   [+1, -1],
-  //   [+1, 0],
-  //   [+1, +1],
-  // ];
-
-  // static readonly lastRowDir: number[][] = [
-  //   [-1, -1],
-  //   [-1, 0],
-  //   [-1, +1],
-  //   [0, -1],
-  //   [0, +1],
-  // ];
-
   static readonly neighbourDirections: number[][] = [
     [-1, -1],
     [-1, 0],
-    [-1, +1],
+    [-1, 1],
     [0, -1],
-    [0, +1],
-    [+1, -1],
-    [+1, 0],
-    [+1, +1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
   ];
-
-  private constructor() {}
 
   public static findNeighbourCells(cell: Cell, cells: Cell[][]): Cell[] {
     const { row, order } = cell;
 
-    return this.neighbourDirections.flatMap(([m1, m2]) => {
-      if (row + m1 in cells && order + m2 in cells) {
-        return cells[row + m1][order + m2];
+    return this.neighbourDirections.flatMap(([rowMod, orderMod]) => {
+      if (cells[row + rowMod]) {
+        return cells[row + rowMod][order + orderMod] ?? [];
       }
       return [];
     });
@@ -53,31 +35,22 @@ class Util {
   }
 
   public static shouldDie(cell: Cell, cells: Cell[][]): boolean {
-    const neighbours = this.livingNeighbours(cell, cells);
+    const nNeighbours = this.livingNeighbours(cell, cells).length;
 
-    if (neighbours.length < 2) {
-      return false;
-    }
-    if (neighbours.length === 2) {
-      return true;
-    }
-    if (neighbours.length === 3) {
-      return true;
-    }
-    if (neighbours.length > 3) {
+    if (nNeighbours < 2 || nNeighbours > 3) {
       return false;
     }
 
-    return cell.alive;
+    return true;
   }
 
   static shouldAwaken(cell: Cell, cells: Cell[][]): boolean {
     const neighbours = Util.livingNeighbours(cell, cells);
-    if (cell.alive === false && neighbours.length === 3) {
+    if (neighbours.length === 3) {
       return true;
     }
 
-    return cell.alive;
+    return false;
   }
 }
 
