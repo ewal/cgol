@@ -169,6 +169,19 @@ class Game {
     return this._gridDimension;
   }
 
+  set gridDimension(dimensions: GridDimension) {
+    if (!this._running) {
+      this._gridDimension = dimensions;
+      this._grid.cells = this._grid.generateMatrix(dimensions);
+
+      const initialAlive = dimensions.x * dimensions.y * 0.2;
+      this._initialAlive = initialAlive;
+      this._grid.randomizeAliveCells(initialAlive);
+
+      this.signal(GameEvent.SETTING_CHANGE);
+    }
+  }
+
   get onGameEvent(): IEvent<Game, GameEvent> {
     return this._gameStateUpdateEvent.asEvent();
   }
