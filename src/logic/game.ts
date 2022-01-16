@@ -161,6 +161,14 @@ class Game {
     return this._initialAlive;
   }
 
+  set initialAlive(alive: number) {
+    this._initialAlive = alive;
+    this._grid.cells = this._grid.generateMatrix(this._gridDimension);
+
+    this._grid.randomizeAliveCells(alive);
+    this.signal(GameEvent.SETTING_CHANGE);
+  }
+
   get timer(): Timer {
     return this._timer;
   }

@@ -13,7 +13,7 @@ const App: React.FC = () => {
     const initialAlive = game.gridDimension.x * game.gridDimension.y * 0.2;
 
     Game.getInstance().initialize({
-      refreshRate: 100,
+      refreshRate: 50,
       gridDimension: game.gridDimension,
       initialAlive,
     });
