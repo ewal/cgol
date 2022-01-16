@@ -1,22 +1,24 @@
 .cell {
+  position: relative;
+}
+
+.cell::after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   border: solid 1px var(--bg_visual_green);
-  /* transition-duration: 1500ms; */
+  /* transition-duration: 100ms; */
   /* transition-property: background-color; */
   /* transition-timing-function: ease-out; */
 }
 
-.cell:hover {
+.cell:hover::after {
   border-color: var(--red);
-  transition: background-color 0s;
 }
 
-.alive:hover {
-  transition: background-color 0s;
-}
-
-.alive {
+.alive::after {
   background-color: var(--green);
-  /* transition-property: background-color; */
-  /* transition-duration: 1000ms; */
-  /* transition-timing-function: ease-out; */
 }
