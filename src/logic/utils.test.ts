@@ -54,6 +54,31 @@ describe("Util", () => {
     });
   });
 
+  /*
+  describe("livingNeighbours", () => {
+    it("should be fast", () => {
+      const grid = new Grid();
+      const cells = grid.generateMatrix({ x: 5000, y: 5000 });
+
+      const cell = cells[5][5];
+
+      const start = performance.now();
+      Util.livingNeighbours(cell, cells);
+      const end = performance.now();
+      console.log("RESULT 1:", end - start);
+
+      const start2 = performance.now();
+      Util.livingNeighbours(cell, cells);
+      const end2 = performance.now();
+      console.log("RESULT 2:", end2 - start2);
+
+      const start3 = performance.now();
+      Util.livingNeighbours(cell, cells);
+      const end3 = performance.now();
+      console.log("RESULT 3:", end3 - start3);
+    });
+  });*/
+
   describe("shouldAwaken", () => {
     let grid: Grid;
 

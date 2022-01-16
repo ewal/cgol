@@ -1,7 +1,7 @@
 import Cell from "./cell";
 
 class Util {
-  static readonly neighbourDirections: number[][] = [
+  private static readonly neighbourDirections: number[][] = [
     [-1, -1],
     [-1, 0],
     [-1, 1],
@@ -12,13 +12,38 @@ class Util {
     [1, 1],
   ];
 
-  // TODO:
-  // Could this be even faster using different direction arrays
-  // for first and last rows + first and last last cells?
+  private static readonly firstRowDirections: number[][] = [
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ];
+
+  private static readonly lastRowDirections: number[][] = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+  ];
+
+  private static getDirectionList(row: number, total: number): number[][] {
+    switch (row) {
+      case 0:
+        return Util.firstRowDirections;
+      case total:
+        return Util.lastRowDirections;
+      default:
+        return Util.neighbourDirections;
+    }
+  }
+
   static findNeighbourCells(cell: Cell, cells: Cell[][]): Cell[] {
     const { row, order } = cell;
+    const dirs = Util.getDirectionList(order, cells.length);
 
-    return this.neighbourDirections.flatMap(([rowMod, orderMod]) => {
+    return dirs.flatMap(([rowMod, orderMod]) => {
       if (cells[row + rowMod]) {
         return cells[row + rowMod][order + orderMod] ?? [];
       }
