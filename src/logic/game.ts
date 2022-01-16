@@ -27,7 +27,7 @@ class Game {
   private _running = false;
   private _refreshRate = 100;
   private _initialAlive = 100;
-  private _gridDimension: GridDimension = { x: 10, y: 10 };
+  private _gridDimension: GridDimension = { x: 50, y: 50 };
   private _handOfGod = 0;
   private _touchedByGod: Cell[] = [];
 
@@ -110,18 +110,26 @@ class Game {
 
   faster(): void {
     const rate = this._refreshRate <= 50 ? 10 : 50;
+
     if (this._refreshRate > 10) {
       this._refreshRate = this._refreshRate - rate;
-      this._timer.start(this._refreshRate);
-      this.signal(GameEvent.SETTING_CHANGE);
+
+      if (this.isRunning) {
+        this._timer.start(this._refreshRate);
+      }
     }
+
+    this.signal(GameEvent.SETTING_CHANGE);
   }
 
   slower(): void {
     const rate = this._refreshRate < 50 ? 10 : 50;
-
     this._refreshRate = this._refreshRate + rate;
-    this._timer.start(this._refreshRate);
+
+    if (this.isRunning) {
+      this._timer.start(this._refreshRate);
+    }
+
     this.signal(GameEvent.SETTING_CHANGE);
   }
 

@@ -30,7 +30,6 @@ class Timer {
         this.signal(TimerEvent.TICK);
       }
 
-      cancelAnimationFrame(this._handler);
       this._handler = requestAnimationFrame(loop);
     };
 

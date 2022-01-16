@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Game, { GameEvent } from "../logic/game";
 import { default as GameCell } from "../logic/cell";
 import Row from "./Row";
-import { GridDimension } from "../logic/grid";
 
 const styles = ({ width, height }: { width: number; height: number }) => ({
   width: `${width}vh`,
@@ -13,11 +12,7 @@ const styles = ({ width, height }: { width: number; height: number }) => ({
 
 const game = Game.getInstance();
 
-interface IProps {
-  initialDimension: GridDimension;
-}
-
-const Grid: React.FC<IProps> = ({ initialDimension }) => {
+const Grid: React.FC = () => {
   const [state, setState] = useState<GameCell[][]>();
   const [gridSize, setGridSize] = useState<{ width: number; height: number }>({
     width: 85, // viewport height

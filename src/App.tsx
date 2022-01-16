@@ -5,16 +5,16 @@ import Grid from "./components/Grid";
 import Controls from "./components/Controls";
 import Game from "./logic/game";
 import Stats from "./components/Stats";
-import { GridDimension } from "./logic/grid";
+
+const game = Game.getInstance();
 
 const App: React.FC = () => {
   useEffect(() => {
-    const gridDimension: GridDimension = { x: 50, y: 50 };
-    const initialAlive = gridDimension.x * gridDimension.y * 0.15;
+    const initialAlive = game.gridDimension.x * game.gridDimension.y * 0.2;
 
     Game.getInstance().initialize({
       refreshRate: 100,
-      gridDimension,
+      gridDimension: game.gridDimension,
       initialAlive,
     });
   }, []);
