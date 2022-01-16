@@ -1,3 +1,24 @@
+.form-group-vertical {
+  /* display: flex; */
+  /* flex-direction: column; */
+  display: inline-grid;
+  grid-template-columns: 1fr auto;
+  row-gap: var(--size-small);
+  align-content: center;
+}
+
+.form-input-addon {
+  /* display: inline-grid; */
+  /* grid-template-columns: auto 1fr; */
+  column-gap: var(--size-medium);
+  /* flex: 1; */
+}
+
+.form-input-addon {
+  display: inline-flex;
+  align-items: center;
+}
+
 .controls {
   display: grid;
   max-width: 100%;
@@ -24,7 +45,8 @@
 
 .controls .dimensions .con {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  flex-direction: column;
+  row-gap: var(--size-base);
 }
 
 .controls .actions {
@@ -45,8 +67,7 @@
 
 .controls label {
   display: inline-flex;
-  column-gap: var(--size-medium);
-  justify-content: center;
+  column-gap: var(--size-small);
   align-items: center;
 }
 

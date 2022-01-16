@@ -11,6 +11,7 @@ const Controls: React.FC = () => {
     gameState: GameEvent.INIT,
     visuals: 0,
     generations: 0,
+    initial: 0,
   });
 
   const handleStartStop = () => {
@@ -56,7 +57,6 @@ const Controls: React.FC = () => {
   };
 
   const handleVisualChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log("E", e);
     setState({ ...state, visuals: Number(e.currentTarget.value) });
   };
 
@@ -68,14 +68,24 @@ const Controls: React.FC = () => {
       message === GameEvent.STOP ||
       message === GameEvent.RESET
     ) {
+      const { x, y } = instance.gridDimension;
+
+      console.log((instance.initialAlive / (x * y)) * 100);
       setState({
         isRunning: instance.isRunning,
-        dimension: { x: instance.gridDimension.x, y: instance.gridDimension.y },
+        dimension: { x, y },
         gameState: message,
         visuals: 0,
         generations: instance.generations,
+        initial: (instance.initialAlive / (x * y)) * 100,
       });
     }
+  };
+
+  const handleInitial = (e: React.FormEvent<HTMLInputElement>) => {
+    const { x, y } = state.dimension;
+    const val = Number(e.currentTarget.value);
+    game.initialAlive = (val * (x * y)) / 100;
   };
 
   useEffect(() => {
@@ -87,32 +97,49 @@ const Controls: React.FC = () => {
   return (
     <form className="controls">
       <fieldset className="dimensions">
-        <legend>Settings</legend>
+        <legend>Grid settings</legend>
         <div className="con">
-          <label>
-            <span>X</span>
-            <input
-              onChange={handleX}
-              value={state?.dimension.x}
-              type="number"
-              step="5"
-              max="100"
-              min="10"
-              disabled={state.isRunning || state.generations > 0}
-            />
-          </label>
-          <label>
-            <span>Y</span>
-            <input
-              onChange={handleY}
-              value={state?.dimension.y}
-              type="number"
-              step="5"
-              max="100"
-              min="10"
-              disabled={state.isRunning || state.generations > 0}
-            />
-          </label>
+          <div className="group">
+            <label>
+              <span>X:</span>
+              <input
+                onChange={handleX}
+                value={state?.dimension.x}
+                type="number"
+                step="5"
+                max="100"
+                min="10"
+                disabled={state.isRunning || state.generations > 0}
+              />
+            </label>
+            <label>
+              <span>Y:</span>
+              <input
+                onChange={handleY}
+                value={state?.dimension.y}
+                type="number"
+                step="5"
+                max="100"
+                min="10"
+                disabled={state.isRunning || state.generations > 0}
+              />
+            </label>
+          </div>
+          <div className="form-group-vertical">
+            <label>Initial cells:</label>
+            <div className="form-input-addon">
+              <span className="addon">%</span>
+              <input
+                type="number"
+                step="1"
+                min="1"
+                max="100"
+                value={Math.round(state.initial)}
+                onChange={handleInitial}
+                disabled={state.isRunning || state.generations > 0}
+              />
+            </div>
+          </div>
         </div>
       </fieldset>
       <div className="sep" />
@@ -133,7 +160,7 @@ const Controls: React.FC = () => {
           Reset
         </button>
       </fieldset>
-      <fieldset className="visuals">
+      <fieldset className="visuals hide">
         <legend>Visuals</legend>
         <input
           type="range"
