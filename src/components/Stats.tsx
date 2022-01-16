@@ -1,33 +1,26 @@
 import "./Stats.css";
 import React, { useEffect, useState } from "react";
 import Game from "../logic/game";
+import Dimensions from "./Stats/Dimensions";
+import RefreshInterval from "./Stats/RefreshInterval";
+import Generations from "./Stats/Generations";
+import CellsState from "./Stats/CellsState";
 
 const game = Game.getInstance();
 
 const Stats: React.FC = () => {
   const [state, setState] = useState({
-    active: 0,
-    generations: 0,
-    refreshRate: 0,
+    interference: 0,
   });
-
-  const activePercentage = (
-    (state?.active / (game.gridDimension.x * game.gridDimension.y)) *
-    100
-  ).toFixed(2);
 
   const startPercentage = (
     (game.initialAlive / (game.gridDimension.x * game.gridDimension.y)) *
     100
   ).toFixed(2);
 
-  const { gridDimension } = game;
-
-  const handleStateUpdate = (game: Game) => {
+  const handleStateUpdate = (instance: Game) => {
     setState({
-      active: game.grid.activeCells.length,
-      generations: game.generations,
-      refreshRate: game.refreshRate,
+      interference: instance.interference,
     });
   };
 
@@ -41,35 +34,29 @@ const Stats: React.FC = () => {
     <dl className="stats">
       <dt>Grid</dt>
       <dd>
-        {gridDimension.x}
-        <span className="sign times">x</span>
-        {gridDimension.y}
-        <span className="sep">/</span>
-        {game.gridDimension.x * game.gridDimension.y}
+        <Dimensions />
       </dd>
-      <dt>Initial cells</dt>
+      <dt>Initial living</dt>
       <dd>
-        {game.initialAlive}
+        {Math.round(game.initialAlive)}
         <span className="sep">/</span>
         {startPercentage}
         <span className="sign">%</span>
       </dd>
       <dt>Living cells</dt>
       <dd>
-        {state?.active}
-        <span className="sep">/</span>
-        {activePercentage}
-        <span className="sign">%</span>
+        <CellsState />
       </dd>
       <dt>Refresh interval</dt>
       <dd>
-        {state?.refreshRate}
-        <span className="sign">ms</span>
+        <RefreshInterval />
       </dd>
       <dt>Generations</dt>
-      <dd>{state?.generations}</dd>
+      <dd>
+        <Generations />
+      </dd>
       <dt>Interference</dt>
-      <dd>0</dd>
+      <dd>{state?.interference}</dd>
     </dl>
   );
 };
