@@ -1,7 +1,35 @@
 .controls {
+  display: grid;
+  max-width: 100%;
+  row-gap: var(--size-medium);
+}
+
+.controls fieldset {
+  row-gap: var(--size-medium);
+  margin: 0;
+  padding: var(--size-base);
+  border: solid var(--bg_statusline1) 1px;
+}
+
+.controls .dimensions {
   display: flex;
   flex-direction: column;
-  row-gap: var(--size-medium);
+}
+
+.controls .dimensions input {
+  max-width: 100%;
+  min-width: 0;
+  width: 100px;
+}
+
+.controls .dimensions .con {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.controls .actions {
+  display: flex;
+  flex-direction: column;
 }
 
 .controls button {
@@ -9,6 +37,24 @@
   background-color: var(--bg_visual_blue);
   color: var(--blue);
   padding: var(--size-medium);
+}
+
+.controls button:disabled {
+  opacity: 0.5;
+}
+
+.controls label {
+  display: inline-flex;
+  column-gap: var(--size-medium);
+  justify-content: center;
+  align-items: center;
+}
+
+.controls input {
+  font-size: var(--size-base);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 
 .controls button:hover {
@@ -25,4 +71,8 @@
 
 .controls .group button {
   flex: 1;
+}
+
+.controls .visuals input {
+  width: 100%;
 }
