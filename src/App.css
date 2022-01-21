@@ -33,3 +33,22 @@ h1 {
   justify-content: center;
   align-items: center;
 }
+
+.github-link {
+  display: flex;
+  column-gap: var(--size-medium);
+  justify-content: center;
+  align-items: center;
+}
+
+.github-link img {
+  opacity: 0.5;
+}
+
+.github-link a {
+  color: var(--fg0);
+}
+
+.github-link a:hover {
+  color: var(--fg1);
+}
