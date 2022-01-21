@@ -10,7 +10,8 @@ const game = Game.getInstance();
 
 const App: React.FC = () => {
   useEffect(() => {
-    const initialAlive = game.gridDimension.x * game.gridDimension.y * 0.2;
+    const { x, y } = game.gridDimension;
+    const initialAlive = x * y * 0.2;
 
     Game.getInstance().initialize({
       refreshRate: 50,

@@ -62,7 +62,6 @@ class Game {
     this._gridDimension = data.gridDimension;
 
     this._grid.cells = this._grid.generateMatrix(data.gridDimension);
-    this._grid.randomizeAliveCells(this._initialAlive);
 
     this._timer.onTimerEvent.subscribe(this.handleTimerEvent);
 
@@ -86,6 +85,9 @@ class Game {
   start() {
     this._running = true;
     this._timer.start(this._refreshRate);
+    if (this.generations === 0) {
+      this._grid.randomizeAliveCells(this._initialAlive);
+    }
     this.signal(GameEvent.START);
   }
 
@@ -165,7 +167,6 @@ class Game {
     this._initialAlive = alive;
     this._grid.cells = this._grid.generateMatrix(this._gridDimension);
 
-    this._grid.randomizeAliveCells(alive);
     this.signal(GameEvent.SETTING_CHANGE);
   }
 
@@ -192,7 +193,6 @@ class Game {
 
       const initialAlive = dimensions.x * dimensions.y * 0.2;
       this._initialAlive = initialAlive;
-      this._grid.randomizeAliveCells(initialAlive);
 
       this.signal(GameEvent.SETTING_CHANGE);
     }
