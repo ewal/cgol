@@ -8,7 +8,7 @@ describe("Cell", () => {
     expect(cell.alive).toBeTruthy();
   });
 
-  it("toggles the alive property", () => {
+  it("has a boolean state of existence", () => {
     const cell = new Cell(0, 1, true);
     cell.toggle();
     expect(cell.alive).toBeFalsy();

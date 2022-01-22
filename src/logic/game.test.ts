@@ -14,7 +14,6 @@ describe("Game", () => {
       expect(game).toBeInstanceOf(Game);
     });
 
-    // Important stuff below
     it("has a Grid class reference", () => {
       expect(game.grid).toBeInstanceOf(Grid);
     });
