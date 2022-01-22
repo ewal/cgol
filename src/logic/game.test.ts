@@ -10,10 +10,11 @@ describe("Game", () => {
       game = Game.getInstance();
     });
 
-    test("Game is a singleton", () => {
+    test("it's a singleton, fyi", () => {
       expect(game).toBeInstanceOf(Game);
     });
 
+    // Important stuff below
     it("has a Grid class reference", () => {
       expect(game.grid).toBeInstanceOf(Grid);
     });
