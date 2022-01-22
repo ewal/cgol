@@ -36,7 +36,7 @@ const Stats: React.FC = () => {
       <dd>
         <Dimensions />
       </dd>
-      <dt>Initial living</dt>
+      <dt>Initial cells</dt>
       <dd>
         {Math.round(game.initialAlive)}
         <span className="sep">/</span>
