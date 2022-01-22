@@ -41,6 +41,13 @@ const App: React.FC = () => {
           >
             ewal/cgol
           </a>
+          /{" "}
+          <a
+            title="Wikipedia – Conway's game of life"
+            href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life"
+          >
+            About
+          </a>
         </code>
       </aside>
       <main className="right">
