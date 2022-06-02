@@ -1,5 +1,7 @@
 # Conway's Game of Life
 
+First try. Using canvas is probably a better choice.
+
 Check it out https://cgol-react.web.app/
 
 ## Todo
