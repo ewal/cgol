@@ -86,7 +86,7 @@ describe("Util", () => {
       grid = new Grid();
     });
 
-    it("not awaken cell if less than 3 neighbours are alive", () => {
+    it("should not resurrect cell if less than 3 neighbours are alive", () => {
       const cells = grid.generateMatrix({
         x: 10,
         y: 10,
@@ -96,7 +96,7 @@ describe("Util", () => {
       expect(cell.alive).toBeFalsy();
     });
 
-    it("should awaken cell if there are exactly 3 living neighbours", () => {
+    it("should resurrect cell if there are exactly 3 living neighbours", () => {
       const cells = grid.generateMatrix({
         x: 10,
         y: 10,
